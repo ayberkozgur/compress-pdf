@@ -1,0 +1,85 @@
+#!/bin/bash
+
+function printhelp(){
+	echo "Usage: compress-pdf [OPTION] INPUTFILE [OUTPUTFILE]"
+	echo "Compresses given pdf file using gs."
+	echo ""
+	echo "  -h, --help           Show this text"
+	echo "      --level=value    Set compression level:"
+	echo "                       1: Use -dPDFSETTINGS=/default"
+	echo "                       2: Use -dPDFSETTINGS=/prepress"
+	echo "                       3: Use -dPDFSETTINGS=/printer"
+	echo "                       4: Use -dPDFSETTINGS=/ebook"
+	echo "                       5: Use -dPDFSETTINGS=/screen"
+}
+
+#Parse arguments, thanks to https://gist.github.com/855086.git
+while [ "$1" != "" ]
+do
+	PARAM=`echo $1 | awk -F= '{print $1}'`
+	VALUE=`echo $1 | awk -F= '{print $2}'`
+	case $PARAM in
+		-h | --help)
+			printhelp
+			exit
+			;;
+		--level)
+			if [ "$VALUE" == "" ]
+			then
+				echo "Provide one of 1 through 5 to --level."
+				exit 1
+			fi
+			if [ "$VALUE" -ne 1 ] && [ "$VALUE" -ne 2 ] && [ "$VALUE" -ne 3 ] && [ "$VALUE" -ne 4 ] && [ "$VALUE" -ne 5 ]
+			then
+				echo "Unknown compression level: $VALUE"
+				exit 1
+			fi
+			LEVEL=$VALUE
+			;;
+		*)
+			if [ -z "$FILE" ]
+			then
+				FILE=$PARAM
+			else
+				OUTPUTFILE=$PARAM
+			fi
+			;;
+	esac
+	shift
+done
+
+#Check input/output files
+if [ -z "$FILE" ]
+then
+	echo "No input file given"
+	exit 1
+fi
+if [ -z "$OUTPUTFILE" ]
+then
+	OUTPUTFILE="${FILE%.*}-compressed.${FILE##*.}"
+fi
+
+#Do compression
+if [ -z "$LEVEL" ]
+then
+	LEVEL=1
+fi
+case $LEVEL in
+	1) LEVEL="/default";;
+	2) LEVEL="/prepress";;
+	3) LEVEL="/printer";;
+	4) LEVEL="/ebook";;
+	5) LEVEL="/screen";;
+esac
+gs -sDEVICE=pdfwrite -dUseCIEColor -dCompatibilityLevel=1.4 -dPDFSETTINGS="$LEVEL" -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$OUTPUTFILE" "$FILE"
+
+#Print results if compression successful
+if [ "$?" -eq 0 ]
+then
+	SIZEH=`du -h $FILE | cut -f1`
+	SIZE=`du $FILE | cut -f1`
+	FINALSIZEH=`du -h $OUTPUTFILE | cut -f1`
+	FINALSIZE=`du $OUTPUTFILE | cut -f1`
+	COMPRESSION=`echo "100 - 100*$FINALSIZE/$SIZE" | bc`
+	echo "$FILE: $SIZEH, $OUTPUTFILE: $FINALSIZEH, compression: $COMPRESSION%"
+fi
