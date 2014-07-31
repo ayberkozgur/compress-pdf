@@ -5,7 +5,7 @@ function printhelp(){
 	echo "Compresses given pdf file using gs."
 	echo ""
 	echo "  -h, --help           Show this text"
-	echo "      --level=value    Set compression level:"
+	echo "      --level=[1-5]    Set compression level:"
 	echo "                       1: Use -dPDFSETTINGS=/default"
 	echo "                       2: Use -dPDFSETTINGS=/prepress"
 	echo "                       3: Use -dPDFSETTINGS=/printer"
