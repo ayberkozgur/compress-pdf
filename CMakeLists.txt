@@ -1,4 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_INSTALL_PREFIX "/usr/local")
 project (compress-pdf NONE)
 install(PROGRAMS compress-pdf DESTINATION bin)
+
+set(CPACK_GENERATOR DEB)
+SET(CPACK_SET_DESTDIR TRUE)
+set(CPACK_PACKAGE_EXECUTABLES "compress-pdf;compress-pdf")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "1")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ayberk Özgür <ayberk.ozgur@pfl.ch>")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Compresses PDF files using ghostscript.")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "ghostscript (>= 8.71)")
+set(CPACK_DEBIAN_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION})
+set(CPACK_DEBIAN_PACKAGE_SECTION "Utilities")
+include(CPack)
 
