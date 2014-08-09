@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_INSTALL_PREFIX "/usr/local")
 project (compress-pdf NONE)
 install(PROGRAMS compress-pdf DESTINATION bin)
+install(FILES compress-pdf.1 DESTINATION share/man/man1)
 
 set(CPACK_GENERATOR DEB)
 SET(CPACK_SET_DESTDIR TRUE)

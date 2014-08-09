@@ -2,7 +2,7 @@
 mkdir -p build/
 cd build
 rm -rf *
-cmake ..
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 cpack
 dpkg --install *.deb
 cd ..

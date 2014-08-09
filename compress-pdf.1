@@ -1,0 +1,35 @@
+.TH compress-pdf 1 "09 July 2014"
+
+.SH NAME
+compress-pdf \- Compresses PDF files using Ghostscript
+
+.SH SYNOPSIS
+.B compress-pdf
+[\fIOPTION\fR] \fIINPUTFILE\fR [\fIOUTPUTFILE\fR]
+
+.SH DESCRIPTION
+Compresses PDF files using Ghostscript with various compression level options.
+Essentially runs the following command:
+.IP
+\fBgs\fR \-sDEVICE=pdfwrite \-dUseCIEColor \-dCompatibilityLevel=1.4 \-dPDFSETTINGS=[\fILEVEL\fR] \-dNOPAUSE \-dQUIET \-dBATCH \-sOutputFile=[\fIOUTPUTFILE\fR] [\fIINPUTFILE\fR]
+.PP
+where [\fILEVEL\fR] is determined by the user given level. Default [\fILEVEL\fR] is \fI/default\fR.
+.PP
+If the compression is successful, displays the input and output files sizes
+and the compression rate. 
+
+.SH OPTIONS
+.TP
+\fB\-\-level\fR=\fIN\fR
+Specifies the compression level. \fIN\fR is 1, 2, 3, 4 or 5; larger \fIN\fR
+means more compression. The values of \fIN\fR set -dPDFSETTINGS to the 
+following:
+
+    1: \fI/default\fR
+    2: \fI/prepress\fR
+    3: \fI/printer\fR
+    4: \fI/ebook\fR
+    5: \fI/screen\fR
+
+.SH AUTHOR
+Ayberk \[:O]zg\[:u]r \- <ayberk.ozgur@epfl.ch>
