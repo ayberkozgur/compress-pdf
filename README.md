@@ -21,4 +21,3 @@ To uninstall, run:
 sudo dpkg --remove compress-pdf
 ```
 
-Why CMake when there is no `c++` you ask? Why not? CMake (along with cpack) is a great tool to install code or binaries from any language with or without compilation. 
